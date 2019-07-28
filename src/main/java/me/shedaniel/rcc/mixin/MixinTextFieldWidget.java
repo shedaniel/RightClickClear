@@ -25,7 +25,7 @@ public abstract class MixinTextFieldWidget extends AbstractButtonWidget {
     public void mouseClicked(double double_1, double double_2, int int_1, CallbackInfoReturnable<Boolean> callbackInfo) {
         if (this.isVisible()) {
             boolean boolean_1 = double_1 >= (double) this.x && double_1 < (double) (this.x + this.width) && double_2 >= (double) this.y && double_2 < (double) (this.y + this.height);
-            if (int_1 == 1) {
+            if (boolean_1 && int_1 == 1) {
                 setText("");
             }
         }
