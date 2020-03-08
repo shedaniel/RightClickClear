@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TextFieldWidget.class)
 public abstract class MixinTextFieldWidget extends AbstractButtonWidget {
     
-    public MixinTextFieldWidget(int int_1, int int_2, String string_1) {
-        super(int_1, int_2, string_1);
+    public MixinTextFieldWidget(int x, int y, int width, int height, String message) {
+        super(x, y, width, height, message);
     }
     
     @Shadow

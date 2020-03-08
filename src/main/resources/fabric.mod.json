@@ -4,7 +4,7 @@
   "version": "${version}",
   "name": "Right Click Clear",
   "authors": [
-    "Danielshe"
+    "shedaniel"
   ],
   "license": "CC0-1.0",
   "icon": "assets/right-click-clear/icon.png",
@@ -13,7 +13,8 @@
     "right-click-clear.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.4.0"
+    "fabricloader": ">=0.4.0",
+    "minecraft": "~1.16-Snapshot.20.10.a"
   },
   "custom": {
     "modmenu:clientsideOnly": true
