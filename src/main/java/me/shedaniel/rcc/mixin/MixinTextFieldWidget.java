@@ -2,6 +2,7 @@ package me.shedaniel.rcc.mixin;
 
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TextFieldWidget.class)
 public abstract class MixinTextFieldWidget extends AbstractButtonWidget {
     
-    public MixinTextFieldWidget(int x, int y, int width, int height, String message) {
+    public MixinTextFieldWidget(int x, int y, int width, int height, Text message) {
         super(x, y, width, height, message);
     }
     
