@@ -1,8 +1,11 @@
 package me.shedaniel.rcc.mixin;
 
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,12 +25,40 @@ public abstract class MixinTextFieldWidget extends AbstractButtonWidget {
     @Shadow
     public abstract void setText(String string_1);
     
+    @Shadow @Final private TextRenderer textRenderer;
+    
+    @Shadow
+    public abstract void setCursor(int cursor);
+    
+    @Shadow private int firstCharacterIndex;
+    
+    @Shadow private String text;
+    
+    @Shadow
+    public abstract int getInnerWidth();
+    
+    @Shadow private boolean focusUnlocked;
+    
+    @Shadow
+    public abstract void setSelected(boolean selected);
+    
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-    public void mouseClicked(double double_1, double double_2, int int_1, CallbackInfoReturnable<Boolean> callbackInfo) {
+    public void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> callbackInfo) {
         if (this.isVisible()) {
-            boolean boolean_1 = double_1 >= (double) this.x && double_1 < (double) (this.x + this.width) && double_2 >= (double) this.y && double_2 < (double) (this.y + this.height);
-            if (boolean_1 && int_1 == 1) {
+            boolean hovered = mouseX >= (double) this.x && mouseX < (double) (this.x + this.width) && mouseY >= (double) this.y && mouseY < (double) (this.y + this.height);
+            if (hovered && button == 1) {
                 setText("");
+                if (this.focusUnlocked) {
+                    this.setSelected(hovered);
+                }
+                
+                if (this.isFocused()) {
+                    int i = MathHelper.floor(mouseX) - this.x - 4;
+                    
+                    String string = this.textRenderer.trimToWidth(this.text.substring(this.firstCharacterIndex), this.getInnerWidth());
+                    this.setCursor(this.textRenderer.trimToWidth(string, i).length() + this.firstCharacterIndex);
+                    callbackInfo.setReturnValue(true);
+                }
             }
         }
     }
