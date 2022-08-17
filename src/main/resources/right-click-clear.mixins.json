@@ -1,13 +1,13 @@
 {
-  "required": true,
-  "package": "me.shedaniel.rcc.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-  ],
-  "client": [
-    "MixinTextFieldWidget"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "me.shedaniel.rcc.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+	],
+	"client": [
+		"MixinTextFieldWidget"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

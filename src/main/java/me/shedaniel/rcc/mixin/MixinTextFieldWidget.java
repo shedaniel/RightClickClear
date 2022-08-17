@@ -1,7 +1,7 @@
 package me.shedaniel.rcc.mixin;
 
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TextFieldWidget.class)
-public abstract class MixinTextFieldWidget extends AbstractButtonWidget {
+public abstract class MixinTextFieldWidget extends ClickableWidget {
     
     public MixinTextFieldWidget(int x, int y, int width, int height, Text message) {
         super(x, y, width, height, message);
@@ -40,16 +40,16 @@ public abstract class MixinTextFieldWidget extends AbstractButtonWidget {
     @Shadow private boolean focusUnlocked;
     
     @Shadow
-    public abstract void setSelected(boolean selected);
+    public abstract void setTextFieldFocused(boolean selected);
     
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     public void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> callbackInfo) {
         if (this.isVisible()) {
-            boolean hovered = mouseX >= (double) this.x && mouseX < (double) (this.x + this.width) && mouseY >= (double) this.y && mouseY < (double) (this.y + this.height);
+            boolean hovered = mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height);
             if (hovered && button == 1) {
                 setText("");
                 if (this.focusUnlocked) {
-                    this.setSelected(hovered);
+                    this.setTextFieldFocused(true);
                 }
                 
                 if (this.isFocused()) {
