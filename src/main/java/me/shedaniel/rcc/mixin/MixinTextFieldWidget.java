@@ -14,53 +14,58 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TextFieldWidget.class)
 public abstract class MixinTextFieldWidget extends ClickableWidget {
-    
-    public MixinTextFieldWidget(int x, int y, int width, int height, Text message) {
-        super(x, y, width, height, message);
-    }
-    
-    @Shadow
-    public abstract boolean isVisible();
-    
-    @Shadow
-    public abstract void setText(String string_1);
-    
-    @Shadow @Final private TextRenderer textRenderer;
-    
-    @Shadow
-    public abstract void setCursor(int cursor);
-    
-    @Shadow private int firstCharacterIndex;
-    
-    @Shadow private String text;
-    
-    @Shadow
-    public abstract int getInnerWidth();
-    
-    @Shadow private boolean focusUnlocked;
-    
-    @Shadow
-    public abstract void setTextFieldFocused(boolean selected);
-    
-    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
-    public void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> callbackInfo) {
-        if (this.isVisible()) {
-            boolean hovered = mouseX >= this.x && mouseX < (this.x + this.width) && mouseY >= this.y && mouseY < (this.y + this.height);
-            if (hovered && button == 1) {
-                setText("");
-                if (this.focusUnlocked) {
-                    this.setTextFieldFocused(true);
-                }
-                
-                if (this.isFocused()) {
-                    int i = MathHelper.floor(mouseX) - this.x - 4;
-                    
-                    String string = this.textRenderer.trimToWidth(this.text.substring(this.firstCharacterIndex), this.getInnerWidth());
-                    this.setCursor(this.textRenderer.trimToWidth(string, i).length() + this.firstCharacterIndex);
-                    callbackInfo.setReturnValue(true);
-                }
-            }
-        }
-    }
-    
+
+	public MixinTextFieldWidget(int x, int y, int width, int height, Text message) {
+		super(x, y, width, height, message);
+	}
+
+	@Shadow
+	public abstract boolean isVisible();
+
+	@Shadow
+	public abstract void setText(String string_1);
+
+	@Shadow
+	@Final
+	private TextRenderer textRenderer;
+
+	@Shadow
+	public abstract void setCursor(int cursor);
+
+	@Shadow
+	private int firstCharacterIndex;
+
+	@Shadow
+	private String text;
+
+	@Shadow
+	public abstract int getInnerWidth();
+
+	@Shadow
+	private boolean focusUnlocked;
+
+	@Shadow
+	public abstract void setTextFieldFocused(boolean selected);
+
+	@Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+	public void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> callbackInfo) {
+		if (this.isVisible()) {
+			boolean hovered = mouseX >= (double) this.x && mouseX < (double) (this.x + this.width) && mouseY >= (double) this.y && mouseY < (double) (this.y + this.height);
+			if (hovered && button == 1) {
+				setText("");
+				if (this.focusUnlocked) {
+					this.setTextFieldFocused(true);
+				}
+
+				if (this.isFocused()) {
+					int i = MathHelper.floor(mouseX) - this.x - 4;
+
+					String string = this.textRenderer.trimToWidth(this.text.substring(this.firstCharacterIndex), this.getInnerWidth());
+					this.setCursor(this.textRenderer.trimToWidth(string, i).length() + this.firstCharacterIndex);
+					callbackInfo.setReturnValue(true);
+				}
+			}
+		}
+	}
+
 }
